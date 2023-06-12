@@ -9,6 +9,16 @@ module Display
         Type in '1' to play 'player vs player' or '2' for 'player vs comp'."
     end
 
+    def display_vs_computer_mode(game_mode)
+        puts "\n\n\n\n\n\n\n\n\n\n
+        #{game_mode}
+
+
+
+
+        Type '1' if you are the codemaker or '2' if you are the codebreaker."
+    end
+
     def display_input_cm_name(game_mode)
         puts "\n\n\n\n\n\n\n\n\n\n
         #{game_mode}
@@ -46,16 +56,27 @@ module Display
 
         Please select between '1' and '2'
         
-        Type in '1' to play 'player vs player' or '2' for 'player vs comp'."
+        Type in your selection."
     end
 
     def display_input_solution(cm_name)
         puts "\n\n\n\n\n\n\n\n\n\n
 
 
-        Codemaker #{cm_name}, please setup your code .
+        Codemaker #{cm_name}, please setup your code.
 
-        Make a combination of four numbers from 1 to 6.
+        Make a combination of four numbers from 1 to 6. Each number represents a color.
+        
+        \e[41m1# red\e[0m, \e[42m2# grn\e[0m, \e[43m3# ylw\e[0m, \e[44m4# blu\e[0m, \e[45m5# pnk\e[0m, \e[46m6# cyn\e[0m"
+    end
+
+    def display_input_solution_vs_comp_cb(cm_name)
+        puts "\n\n\n\n\n\n\n\n\n\n
+        Codemaker #{cm_name}, please setup your code. 
+
+        Make a combination of four numbers from 1 to 6. Each number represents a color.
+
+        Write it on a piece of paper so that the computer would not know. Enter when your done.
         
         \e[41m1# red\e[0m, \e[42m2# grn\e[0m, \e[43m3# ylw\e[0m, \e[44m4# blu\e[0m, \e[45m5# pnk\e[0m, \e[46m6# cyn\e[0m"
     end
@@ -64,7 +85,7 @@ module Display
         puts "\n\n\n\n\n\n\n\n\n\n
 
 
-        Make a combination of four numbers from 1 to 6.
+        Make a combination of four numbers from 1 to 6. Each number represents a color.
         
         \e[41m1# red\e[0m, \e[42m2# grn\e[0m, \e[43m3# ylw\e[0m, \e[44m4# blu\e[0m, \e[45m5# pnk\e[0m, \e[46m6# cyn\e[0m
         
@@ -76,7 +97,7 @@ module Display
         Guest History: #{display_guess_history(guess_history)}
 
 
-        Make a combination of four numbers from 1 to 6.
+        Make a combination of four numbers from 1 to 6. Each number represents a color.
 
         \e[41m1# red\e[0m, \e[42m2# grn\e[0m, \e[43m3# ylw\e[0m, \e[44m4# blu\e[0m, \e[45m5# pnk\e[0m, \e[46m6# cyn\e[0m
 
@@ -90,7 +111,7 @@ module Display
 
         Turn #{guess_history.size + 1}. Codebreaker #{cb_name}, break the code.
 
-        Guess a combination of four numbers from 1 to 6.
+        Guess a combination of four numbers from 1 to 6. Each number represents a color.
 
         \e[41m1# red\e[0m, \e[42m2# grn\e[0m, \e[43m3# ylw\e[0m, \e[44m4# blu\e[0m, \e[45m5# pnk\e[0m, \e[46m6# cyn\e[0m"
     end
@@ -102,10 +123,51 @@ module Display
 
         Turn #{guess_history.size + 1}. Codebreaker #{cb_name}, break the code.
 
-        Guess a combination of four numbers from 1 to 6.
+        Guess a combination of four numbers from 1 to 6. Each number represents a color.
 
         \e[41m1# red\e[0m, \e[42m2# grn\e[0m, \e[43m3# ylw\e[0m, \e[44m4# blu\e[0m, \e[45m5# pnk\e[0m, \e[46m6# cyn\e[0m"
     end
+
+    def display_comp_cb_correct(guess, guess_history)
+        p guess
+        p guess_history
+        puts"\n\n\n\n\n\n\n\n\n\n
+        Guest History: #{display_guess_history(guess_history)}
+
+
+        Turn #{guess_history.size + 1}. Computer guessed #{display_code_interpreter(guess)}.
+
+        How many correct numbers did Computer get? 
+
+        (**correct meaning number is correct and is in correct postion.)"
+    end
+
+    def display_comp_cb_secret(guess, guess_history)
+        p guess
+        p guess_history
+        puts"\n\n\n\n\n\n\n\n\n\n
+        Guest History: #{display_guess_history(guess_history)}
+
+
+        Turn #{guess_history.size + 1}. Computer guessed #{display_code_interpreter(guess)}.
+
+        How many secret numbers did Computer get? (**secret meaning number is correct but in wrong postion.)
+
+        (**secret meaning number is correct but in wrong postion.)"
+    end
+
+    def display_invalid_response
+        puts"\n\n\n\n\n\n\n\n\n\n
+        
+
+
+        
+
+        Invalid response.
+
+        Enter to continue."
+    end
+
     
     def display_cm_win(cm_name, answer)
         puts "\n\n\n\n\n\n\n\n\n\n
@@ -125,6 +187,26 @@ module Display
 
         Codebreaker #{cb_name} wins. Yay!!!"
     end
+
+    def display_cb_win_vs_comp(cm_name)
+        puts "\n\n\n\n\n\n\n\n\n\n
+        
+
+
+        Computer is defeated.
+
+        Codemaker #{cm_name} wins. Yay!!!"
+    end 
+
+    def display_cb_win_vs_comp(cm_name)
+        puts "\n\n\n\n\n\n\n\n\n\n
+        
+
+
+        Codemaker #{cm_name} is defeated.
+
+        Computer wins. Yay!!!"
+    end 
 
 
     def display_code_interpreter(number_comb)

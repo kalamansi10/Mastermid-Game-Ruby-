@@ -17,7 +17,15 @@ module Checker
             input_name
         end
     end
-    
+    def response_validator(correct_num, secret_num)
+        if correct_num.to_i.to_s != correct_num || secret_num.to_i.to_s != secret_num
+            "invalid"
+        elsif (correct_num.to_i + secret_num.to_i) > 4 or (correct_num.to_i + secret_num.to_i) < 0
+            "invalid"
+        else
+            [correct_num.to_i,secret_num.to_i]
+        end
+    end
     def code_validator(cm_name)
         cm_code = gets.chomp
         if cm_code.length == 4 && cm_code =~ /[1-6]/

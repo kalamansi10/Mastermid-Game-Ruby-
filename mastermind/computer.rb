@@ -1,12 +1,18 @@
 class Computer
-    attr_accessor :possible_solutions, :possible_comb
+    attr_accessor :possible_solutions, :possible_comb, :init_sol
     def initialize
         @possible_solutions = initial_filter
         @possible_comb = [[0, 1, 2, 3], [0, 1, 3, 2], [0, 2, 1, 3], [0, 2, 3, 1], [0, 3, 1, 2], [0, 3, 2, 1], [1, 0, 2, 3], [1, 0, 3, 2], [1, 2, 0, 3], [1, 2, 3, 0], [1, 3, 0, 2], [1, 3, 2, 0], [2, 0, 1, 3], [2, 0, 3, 1], [2, 1, 0, 3], [2, 1, 3, 0], [2, 3, 0, 1], [2, 3, 1, 0], [3, 0, 1, 2], [3, 0, 2, 1], [3, 1, 0, 2], [3, 1, 2, 0], [3, 2, 0, 1], [3, 2, 1, 0]]
+        @init_sol = ['1122', '1133', '1144', '1155', '1166', '2211', '2233', '2244', '2255', '2266', '3311', '3322', '3344', '3355', '3366', '4411', '4422', '4433', '4455', '4466', '5511', '5522', '5533', '5544', '5566', '6611', '6622', '6633', '6644', '6655']
+
     end
 
     def generate_comb
         possible_solutions.sample
+    end
+
+    def init_comb
+        init_sol.sample
     end
 
     def initial_filter
@@ -256,12 +262,9 @@ class Computer
     end
 end
 
-comp_new = Computer.new
-p comp_new.two_crct_two_scrt('1234').size
-print comp_new.possible_solutions
 
-
-
+newcomp = Computer.new
+p newcomp.init_comb
 
 
 

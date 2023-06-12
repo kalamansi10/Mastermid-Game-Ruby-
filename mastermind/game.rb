@@ -7,7 +7,7 @@ require_relative 'display'
 class Game
     include Display
     include Checker
-attr_accessor :game_mode, :code_maker, :code_breaker
+attr_accessor :game_mode, :code_maker, :code_breaker, :computer, :computer_guess, :init_turn
     def initialize
         display_start_screen
         gm = game_mode_validator
@@ -19,6 +19,29 @@ attr_accessor :game_mode, :code_maker, :code_breaker
             display_input_cb_name(game_mode)
             @code_breaker = CodeBreaker.new(name_validator)
             player_vs_player
+        when "2"
+            @game_mode = "Computer vs Player"
+            @computer = Computer.new
+            display_vs_computer_mode(game_mode)
+            vs_computer_mode = game_mode_validator
+            case vs_computer_mode
+            when "1"
+                @code_breaker = CodeBreaker.new("Computer")
+                display_input_cm_name(game_mode)
+                @code_maker = CodeMaker.new(name_validator)
+                display_input_solution_vs_comp_cb(code_maker.name)
+                gets.chomp
+                @init_turn = 1
+                @computer_guess = computer.init_comb
+                pvc_cb_game_loop
+            when "2"
+                @code_maker = CodeMaker.new("Computer")
+                display_input_cb_name(game_mode)
+                @code_breaker = CodeBreaker.new(name_validator)
+                code_maker.cb_code = computer.generate_comb
+                display_input_guess(code_breaker.name, code_breaker.guess_history)
+                pvp_game_loop
+            end
         end
     end
 
@@ -43,12 +66,88 @@ attr_accessor :game_mode, :code_maker, :code_breaker
             end
         end
     end
+
+    def pvc_cb_game_loop
+        if code_breaker.guess_history.size == 11
+            game_over(3)
+        else
+            display_comp_cb_correct(computer_guess, code_breaker.guess_history)
+            correct_num = gets.chomp
+            display_comp_cb_secret(computer_guess, code_breaker.guess_history)
+            secret_num = gets.chomp
+            response = response_validator(correct_num, secret_num)
+            case response
+            when [0,1]
+                computer.one_secret(self.computer_guess)
+                comp_cb_loop
+            when [1,0]
+                computer.one_correct(self.computer_guess)
+                comp_cb_loop
+            when [0,2]
+                computer.two_secret(self.computer_guess)
+                comp_cb_loop
+            when [2,0]
+                computer.two_correct(self.computer_guess)
+                comp_cb_loop
+            when [0,3]
+                computer.three_secret(self.computer_guess)
+                comp_cb_loop
+            when [3,0]
+                computer.three_correct(self.computer_guess)
+                comp_cb_loop
+            when [0,4]
+                computer.four_secret(self.computer_guess)
+                comp_cb_loop
+            when [1,1]
+                computer.one_crct_one_scrt(self.computer_guess)
+                comp_cb_loop
+            when [1,2]
+                computer.one_crct_two_scrt(self.computer_guess)
+                comp_cb_loop
+            when [2,1]
+                computer.two_crct_one_scrt(self.computer_guess)
+                comp_cb_loop
+            when [1,3]
+                computer.one_crct_three_scrt(self.computer_guess)
+                comp_cb_loop
+            when [2,2]
+                computer.two_crct_two_scrt(self.computer_guess)
+                comp_cb_loop
+            when [4,0]
+                game_over(2)
+            when [0,0]
+                code_breaker.guess_history << self.computer_guess
+                if init_turn = 1
+                    self.computer_guess = computer.init_comb
+                elsif init_turn = 0
+                    self.computer_guess = computer.generate_comb
+                end
+                pvc_cb_game_loop
+            when "invalid"
+                display_invalid_response
+                gets.chomp
+                pvc_cb_game_loop
+            end
+        end
+    end
+
+    def comp_cb_loop
+        code_breaker.guess_history << self.computer_guess
+        self.computer_guess = computer.generate_comb
+        self.init_turn = 0
+        pvc_cb_game_loop
+    end
+
     def game_over(result)
         case result
         when 0
             display_cm_win(code_maker.name,code_maker.cb_code)
         when 1
             display_cb_win(code_breaker.name, code_maker.cb_code)
+        when 2
+            display_cb_win_vs_comp(code_maker.name)
+        when 3
+            display_comp_win_vs_cb(code_maker.name)
         end
     end
 end
