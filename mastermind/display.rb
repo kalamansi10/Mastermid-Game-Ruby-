@@ -198,7 +198,7 @@ module Display
         Codemaker #{cm_name} wins. Yay!!!"
     end 
 
-    def display_cb_win_vs_comp(cm_name)
+    def display_comp_win_vs_cb(cm_name)
         puts "\n\n\n\n\n\n\n\n\n\n
         
 
