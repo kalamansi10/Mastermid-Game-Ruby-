@@ -1,0 +1,1 @@
+print comp_new.possible_solutions
