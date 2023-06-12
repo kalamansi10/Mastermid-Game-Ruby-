@@ -24,250 +24,30 @@ class Computer
         valid_combs
     end
 
-    def one_secret(guess)
+    def ultimate_filter(guess, response)
         valid_combs = []
         possible_solutions.each do |sample|
-            guess.chars.each do |secret_num|
-                break if valid_combs.any?(sample)
-                valid_combs << sample if sample.chars.count(secret_num) == 1
+            valid_combs << sample if evaluator(guess, sample) == response
+        end
+        self.possible_solutions = valid_combs - [guess]
+    end
+    
+    def evaluator(guess, sample)
+        correct_keys = 0
+        secret_keys = 0
+        sample_copy = sample.dup
+        guess.chars.each_with_index do |number, index|
+            if number == sample_copy[index]
+                correct_keys += 1
+                sample_copy.chars[index] = nil
+            elsif sample_copy.include?(number)
+                secret_keys += 1
+                sample_copy.chars[sample_copy.index(number)] = nil
             end
         end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def one_correct(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            guess.chars.each_with_index do |correct_num, correct_index|
-                break if valid_combs.any?(sample)
-                valid_combs << sample if correct_num == sample.chars[correct_index] && sample.chars.count(correct_num) == 1
-            end
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def two_secret(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                if [sample_one, sample_two].sort == [guess_one, guess_two].sort  && ([sample_three, sample_four] & [guess_three, guess_four]).size == 0
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def two_correct(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                if [sample_one, sample_two] == [guess_one, guess_two]  && ([sample_three, sample_four] & [guess_three, guess_four]).size == 0
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def three_secret(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                if [sample_one, sample_two, sample_three].sort == [guess_one, guess_two, guess_three].sort && sample_four != guess_four
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def three_correct(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                if sample_one == guess_one && sample_two == guess_two && sample_three == guess_three && sample_four != guess_four
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def four_secret(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                if [sample_one, sample_two, sample_three, sample_four].sort == [guess_one, guess_two, guess_three, guess_four].sort
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def one_crct_one_scrt(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                first_condition = sample_one == guess_one && [sample_two, sample_three, sample_four].count(guess_two) == 1
-                second_condtion = sample_two != guess_two && sample_three != guess_three && sample_four != guess_four
-                if first_condition && second_condtion
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def one_crct_two_scrt(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                first_condition = sample_one == guess_one && [sample_two, sample_three].sort == [guess_two, guess_three].sort
-                second_condtion = sample_two != guess_two && sample_three != guess_three && sample_four != guess_four
-                if first_condition && second_condtion
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def two_crct_one_scrt(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                first_condition = sample_one == guess_one && sample_two == guess_two && [sample_three, sample_four].count(guess_three) == 1
-                second_condtion = sample_three != guess_three && sample_four != guess_four
-                if first_condition && second_condtion
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def one_crct_three_scrt(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                if sample_one == guess_one && [sample_two, sample_three, sample_four].sort == [guess_two, guess_three, guess_four].sort
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
-    end
-    def two_crct_two_scrt(guess)
-        valid_combs = []
-        possible_solutions.each do |sample|
-            break if valid_combs.any?(sample)
-            possible_comb.each do |comb|
-                sample_one = sample.chars[comb[0]]
-                sample_two = sample.chars[comb[1]]
-                sample_three = sample.chars[comb[2]]
-                sample_four = sample.chars[comb[3]]
-                guess_one = guess.chars[comb[0]]
-                guess_two = guess.chars[comb[1]]
-                guess_three = guess.chars[comb[2]]
-                guess_four = guess.chars[comb[3]]
-                if sample_one == guess_one && sample_two == guess_two && [sample_three, sample_four].sort == [guess_three, guess_four].sort
-                    valid_combs << sample 
-                    break
-                end
-            end    
-        end
-        self.possible_solutions = valid_combs - [guess]
+        [correct_keys, secret_keys]
     end
 end
-
-
-newcomp = Computer.new
-p newcomp.init_comb
-
-
-
 
 
 

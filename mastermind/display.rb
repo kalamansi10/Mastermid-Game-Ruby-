@@ -129,8 +129,6 @@ module Display
     end
 
     def display_comp_cb_correct(guess, guess_history)
-        p guess
-        p guess_history
         puts"\n\n\n\n\n\n\n\n\n\n
         Guest History: #{display_guess_history(guess_history)}
 
@@ -143,8 +141,6 @@ module Display
     end
 
     def display_comp_cb_secret(guess, guess_history)
-        p guess
-        p guess_history
         puts"\n\n\n\n\n\n\n\n\n\n
         Guest History: #{display_guess_history(guess_history)}
 
